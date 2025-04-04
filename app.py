@@ -55,7 +55,7 @@ SQL Query:
 def execute_sql_query(cursor, query):
     try:
         cursor.execute(query)
-        result = cursor.fetchall()
+        result = cursor.fetchall() 
         print("Query Result:", result)
         return result
     except sqlite3.OperationalError as e:
@@ -66,7 +66,7 @@ def execute_sql_query(cursor, query):
 def get_bot_response(cursor, table_name, user_input, columns, excel_data=None):
     try:
         if excel_data is None:
-            return "Error: No data uploaded. Please upload Excel file first."
+            return "Error: No data uploaded. Please upload Excel file first. and ask something related to data."
         
         if user_input:
                 sql_query = generate_sql_query(table_name, user_input, columns)
