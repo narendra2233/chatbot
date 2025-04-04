@@ -12,11 +12,7 @@ from langchain.schema.output_parser import StrOutputParser
 from langchain_core.chat_history import InMemoryChatMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.runnables.history import RunnableWithMessageHistory
-store={}
-def get_Session_history(session_id:str)->BaseChatMessageHistory:
-    if session_id not in store:
-        store[session_id]=InMemoryChatMessageHistory()
-    return session_id
+
 
 
 def get_bot_response(text,messages):
