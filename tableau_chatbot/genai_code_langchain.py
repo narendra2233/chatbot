@@ -9,10 +9,13 @@ def gen_ai(**kwargs):
     from langchain_core.prompts import ChatPromptTemplate
     from column_list import column_list_dict
     from feedback_data import feedback_data_given
+    from langchain.schema.output_parser import StrOutputParser
     from prompt import input_prompt
     from dotenv import load_dotenv
+    from better_profanity import profanity
     from nemoguardrails import RailsConfig
-    from nemoguardrails.integrations.langchain.runnable_rails import RunnableRails 
+    from nemoguardrails.integrations.langchain.runnable_rails import RunnableRails
+   
     import re
 
     load_dotenv()
@@ -84,14 +87,18 @@ def gen_ai(**kwargs):
       
 
       llm = ChatOpenAI(model="gpt-4o",temperature = 0)
-      chain = prompt | llm
-      config=RailsConfig.from_path("config2")
+      chain = prompt | llm | StrOutputParser()
+
+      config=RailsConfig.from_path("config")
 
       guard_rails=RunnableRails(config=config)
+      
 
       guard_rail_chain=guard_rails | chain
 
+
       result = guard_rail_chain.invoke({"column_context": str(column_dict), "context_feedback":str(feedback_similar_data), "context_data": str(table_similar_data),"input": query})
+      
       return result
       
 
