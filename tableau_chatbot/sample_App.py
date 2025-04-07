@@ -5,36 +5,39 @@ import io
 from dotenv import load_dotenv
 import sqlite3
 import os
+from nemoguardrails import RailsConfig,LLMRails
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate,MessagesPlaceholder
 from langchain.schema.output_parser import StrOutputParser
 from langchain_core.chat_history import InMemoryChatMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.runnables.history import RunnableWithMessageHistory
-from nemoguardrails import RailsConfig
 from nemoguardrails.integrations.langchain.runnable_rails import RunnableRails
 
 
 
-
-def get_bot_response(text,messages):
+def get_bot_response(text):
     load_dotenv()
     llm=ChatOpenAI(model='gpt-4o-mini')
     prompt = ChatPromptTemplate.from_messages([
     ('system', 'you are a helpful assistant'),
-    MessagesPlaceholder("history"),
     ('user', '{text}')
 ])
 
-    #config=RailsConfig.from_path("config2")
-    #guardrail=RunnableRails(config=config)
     chain=prompt | llm | StrOutputParser()
-    #guardrail_chain=guardrail | chain
+    config=RailsConfig.from_path("config2")
 
-    result=chain.invoke({'history':[('user',"i am from bangalore")],'text':text})
+    guard_rails=RunnableRails(config=config)
+
+    guard_rail_chain=guard_rails | chain
+
+
+    result=guard_rail_chain.invoke({'text':text})
+    print(result)
+
     return result
 
- 
+
     
 
 def main():
@@ -142,9 +145,7 @@ def main():
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
     # Get user input after file is uploaded
-    
     user_input = st.chat_input("Ask about the data:")
-    
     if user_input:
             st.session_state.messages.append({'role':'user','content':user_input})
 
@@ -158,7 +159,7 @@ def main():
                     full_response = 'Goodbye! Feel free to come back anytime'
                     message_placeholder.markdown(full_response)
                     st.stop()  # Stop the app from further execution
-                full_response=get_bot_response(user_input,st.session_state.messages)
+                full_response=get_bot_response(user_input)
                 message_placeholder.markdown(full_response)
 
             st.session_state.messages.append({'role':'assistant','content':full_response})
