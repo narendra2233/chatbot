@@ -89,7 +89,7 @@ def gen_ai(**kwargs):
       llm = ChatOpenAI(model="gpt-4o",temperature = 0)
       chain = prompt | llm | StrOutputParser()
 
-      config=RailsConfig.from_path("config")
+      config=RailsConfig.from_path("config2")
 
       guard_rails=RunnableRails(config=config)
       
