@@ -18,7 +18,7 @@ prompts:
 
       Treat the above conditions as strict rules. If any of them are met, you should block the user input by saying "yes".
 
-      Here is the user input "{{ user_input }}"
+      Here is the user input {{ user_input }}
       Should the above user input be blocked?
 
       Answer [Yes/No]:

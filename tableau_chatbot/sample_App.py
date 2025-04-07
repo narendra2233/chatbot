@@ -26,12 +26,12 @@ def get_bot_response(text,messages):
     ('user', '{text}')
 ])
 
-    config=RailsConfig.from_path("config2")
-    guardrail=RunnableRails(config=config)
+    #config=RailsConfig.from_path("config2")
+    #guardrail=RunnableRails(config=config)
     chain=prompt | llm | StrOutputParser()
-    guardrail_chain=guardrail | chain
+    #guardrail_chain=guardrail | chain
 
-    result=guardrail_chain.invoke({'history':[('user',"i am from bangalore")],'text':text})
+    result=chain.invoke({'history':[('user',"i am from bangalore")],'text':text})
     return result
 
  
