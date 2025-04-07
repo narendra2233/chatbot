@@ -5,7 +5,6 @@ import io
 from dotenv import load_dotenv
 import sqlite3
 import os
-from nemoguardrails import RailsConfig,LLMRails
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate,MessagesPlaceholder
 from langchain.schema.output_parser import StrOutputParser
